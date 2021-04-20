@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'FamilyTree.urls'
+ROOT_URLCONF = 'FamilyTree_backend.urls'
 
 TEMPLATES = [
     {
@@ -67,7 +67,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'FamilyTree.wsgi.application'
+WSGI_APPLICATION = 'FamilyTree_backend.wsgi.application'
 
 
 # Database
