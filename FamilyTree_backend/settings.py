@@ -37,7 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'gdstorage',
+    'mainapp',
+    'django_cleanup.apps.CleanupConfig',
 ]
+
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE ='nidaghatta-057864936875.json'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,10 +56,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'FamilyTree_backend.urls'
 
+LOGIN_REDIRECT_URL = ''
+AUTH_USER_MODEL='mainapp.member'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
