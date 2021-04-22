@@ -3,12 +3,20 @@ from django.http import HttpResponse
 # Create your views here.
 from gdstorage.storage import GoogleDriveStorage
 gd_storage = GoogleDriveStorage()
+from django.contrib.auth.decorators import login_required
+from django.contrib import auth
 
 def homepage(request):
-    path=gd_storage.url('Amith_N_C_1')
-    splitted_url=path.split('&')
-    splitted_url[1]='export=view'
-    url="&".join(splitted_url)
     return_response={}
-    return_response['url']=url
     return render(request,'home.html',return_response)
+
+def addmembers(request):
+    return render(request,'addmember.html')
+
+def details(request):
+    return render(request,"details.html")    
+
+@login_required(login_url='/login')
+def logout(request):
+    auth.logout(request)
+    return render(request,'home.html')

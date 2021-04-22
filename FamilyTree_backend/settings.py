@@ -58,6 +58,7 @@ ROOT_URLCONF = 'FamilyTree_backend.urls'
 
 LOGIN_REDIRECT_URL = ''
 AUTH_USER_MODEL='mainapp.member'
+LOGIN_REDIRECT_URL = '/details'
 
 TEMPLATES = [
     {
