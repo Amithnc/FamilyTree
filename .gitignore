@@ -6,7 +6,7 @@ __pycache__/
 #project-specific
 mainapp/migrations
 nidaghatta-057864936875.json
-
+media
 # C extensions
 *.so
 

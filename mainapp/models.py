@@ -41,7 +41,7 @@ class member(AbstractBaseUser):
     pid                 =models.IntegerField()
     ppid                =models.IntegerField()
     image               =models.FileField(upload_to='googlefiles/', storage=gd_storage,help_text="please UPLOAD CORRECT FILE",default='',blank=True)
-    title               =models.CharField(max_length=50,default='',blank=True)
+    tag                 =models.CharField(max_length=50,default='',blank=True)
     url                 =models.CharField(max_length=80,default='',blank=True)
     date_joined         =models.DateTimeField(verbose_name='date joined',auto_now_add=True)
     last_login          =models.DateTimeField(verbose_name='last login',auto_now=True)
@@ -66,11 +66,14 @@ class member(AbstractBaseUser):
 
     def save(self, *args, **kwargs):   
         # print("---------------------------------",self.image) 
-        path=gd_storage.url(str(self.image))
-        splitted_url=path.split('&')
-        splitted_url[1]='export=view'
-        url="&".join(splitted_url)
-        self.url=url
-        super(member, self).save(*args, **kwargs)
+        try:
+            path=gd_storage.url(str(self.image))
+            splitted_url=path.split('&')
+            splitted_url[1]='export=view'
+            url="&".join(splitted_url)
+            self.url=url
+            super(member, self).save(*args, **kwargs)
+        except:
+            super(member, self).save(*args, **kwargs)
     class Meta:
         verbose_name_plural = "FAMILY-DATA"     
