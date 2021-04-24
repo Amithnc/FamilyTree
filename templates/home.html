@@ -44,7 +44,6 @@
 </head>
 
 <body>
-    {% load static %}
     <nav class="navbar navbar-dark navbar-expand-sm bg-dark fixed-top">
         <div class="container">
             <a href="/" class="navbar-brand">
@@ -65,26 +64,30 @@
                     <li class="nav-item">
                         <a href="/details/" class="nav-link active">
                             <button type="button" class="btn btn-outline-light btn-rounded btn-sm  "
-                            data-mdb-ripple-color="#ffffff">
-                            Edit/Add Details <i class="fas fa-user"></i></button>
+                                data-mdb-ripple-color="#ffffff">
+                                Edit/Add Details <i class="fas fa-user"></i></button>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="/logout/" class="nav-link active">
-                            <button type="button" class="btn btn-light btn-rounded btn-sm  " data-mdb-ripple-color="#ffffff">
+                            <button type="button" class="btn btn-light btn-rounded btn-sm  "
+                                data-mdb-ripple-color="#ffffff">
                                 Logout <i class="fas fa-sign-out-alt"></i></button>
                         </a>
                     </li>
                     {%else%}
                     <li class="nav-item">
                         <a href="/login/" class="nav-link active">
-                            <button type="button" class="btn btn-outline-light btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> Login </button>
+                            <button type="button" class="btn btn-outline-light btn-rounded   btn-sm"
+                                data-mdb-ripple-color="#000000"> Login </button>
                         </a>
                     </li>
                     {%endif%}
                     <li class="nav-item">
-                        <a class="nav-link active" style="color: burlywood;" >
-                            Credits to <b>Bhargavi</b> for creating &nbsp; <button type="button" class="btn btn-outline-warning btn-rounded   btn-sm" data-mdb-ripple-color="#000000" onclick="displayimage();" style="color: burlywood;" > This </button>
+                        <a class="nav-link active" style="color: burlywood;">
+                            Credits to <b>Bhargavi</b> for creating &nbsp; <button type="button"
+                                class="btn btn-outline-warning btn-rounded   btn-sm" data-mdb-ripple-color="#000000"
+                                onclick="displayimage();" style="color: burlywood;"> This </button>
                         </a>
                     </li>
                 </ul>

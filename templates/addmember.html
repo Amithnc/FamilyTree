@@ -1,0 +1,35 @@
+<!DOCTYPE html>{% load static %}
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>FILE-update</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="col-md-6 offset-md-3">
+        <span class="anchor"></span>
+        <hr class="my-5">
+        <div class="card card-outline-secondary">
+            <div class="card-body">
+                <h3 class="text-center">ADD</h3>
+                <hr>
+                <form action="{% url 'add' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="container">
+                        <div class="row">
+                            {{ form.as_p }}
+                        </div>
+                    </div>
+                    <button class="btn btn-success" value="submit" type="submit">Update</button>
+                    <p class="text-right"><a href="/" data-toggle="tooltip" title="cancel">
+                            <button type="button" class="btn btn-danger">cancel</button>
+                        </a></p>
+                </form>
+            </div>
+        </div>
+</body>

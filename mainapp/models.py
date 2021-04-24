@@ -39,8 +39,8 @@ class MymemberManager(BaseUserManager):
 class member(AbstractBaseUser):
     name                =models.CharField(max_length=50,default='',unique=True)
     pid                 =models.IntegerField()
-    ppid                =models.IntegerField()
-    image               =models.FileField(upload_to='googlefiles/', storage=gd_storage,help_text="please UPLOAD CORRECT FILE",default='',blank=True)
+    ppid                =models.IntegerField(default=-1)
+    image               =models.FileField(upload_to='googlefiles/', storage=gd_storage,default='',blank=True)
     tag                 =models.CharField(max_length=50,default='',blank=True)
     url                 =models.CharField(max_length=80,default='',blank=True)
     date_joined         =models.DateTimeField(verbose_name='date joined',auto_now_add=True)
