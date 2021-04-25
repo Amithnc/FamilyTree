@@ -11,14 +11,16 @@ from .forms import memberForm
 from django.contrib.auth.hashers import make_password
 option=""
 def homepage(request):
-    return_response={}
+    details=member.objects.all()
+    return_response={"details":details}
     return render(request,'home.html',return_response)
 
+@login_required(login_url='/login')
 def add_member(request):
     user=request.user
     if request.method == "GET":
         global option
-        option=request.GET.get('option',None)
+        option=request.GET.get('option',None)   
     if request.method == "POST":
         form = memberForm(request.POST or None)
         if form.is_valid():
@@ -28,30 +30,54 @@ def add_member(request):
                 details.tag="partner"
                 details.password=make_password(details.password)
                 details.save()
-                messages.success(request, 'Added Successfully')
+                messages.success(request, 'Added Successfully go back to see the result ')
                 return redirect('/details/')
             elif option=="child":
-                details.pid=request.user.id
+                user=request.user
                 if user.tag=="":
                     criterion1_for_prtner = Q(pid=user.id)
                     criterion2_for_prtner = Q(tag="partner")
                     patrner=member.objects.filter(criterion1_for_prtner & criterion2_for_prtner)
+                    details.pid=user.id
+                    details.ppid=patrner[0].id
                 else:
-                    patrner=member.objects.filter(id=user.pid)    
-                details.ppid=patrner[0].id
-                
+                    patrner=member.objects.filter(id=user.pid) 
+                    details.pid=patrner[0].id
+                    details.ppid=user.id
                 details.save()
-                messages.success(request, 'Added Successfully')
+                messages.success(request, 'Added Successfully go back to see the result')
                 return redirect('/details/')
     form=memberForm()
     return_response={}
     return_response['form']=form
+    return_response['option']="Add "+option+" details"
+    return_response['url']='/add-member/'
     return render(request,'addmember.html',return_response)
 
+@login_required(login_url='/login')
 def update(request,id):
-    instance = get_object_or_404(Files,id=id)
+    instance = get_object_or_404(member,id=id)
+    form = memberForm(request.GET or None,instance = instance)
+    if request.method == "POST":
+        form = memberForm(request.POST  or None,request.FILES,instance = instance)
+        if form.is_valid():
+            details = form.save(commit=False)
+            details.password=make_password(details.password)
+            details.save()    
+            messages.success(request, 'Updated Successfully go back to see the result')
+            return redirect('/details/')
+    return_response={}
+    return_response['form']=form 
+    return_response['option']="Edit Profile:"+instance.name
+    return_response['url']='/update/'+str(instance.id)+"/"
+    return render(request,'addmember.html',return_response)
 
-    return render(request,'addmember.html')
+@login_required(login_url='/login')
+def delete(request,id):
+    instance=member.objects.filter(id=id)
+    instance.delete()
+    messages.success(request, 'Deleted Successfully go back to see the result')
+    return redirect('/details/')
 
 @login_required(login_url='/login')
 def details(request):
@@ -73,8 +99,8 @@ def details(request):
     else:
         patrner=member.objects.filter(id=root_member[0].pid)   
         if len(patrner)==1:
-            criterion1_for_children=Q(pid=root_member[0].id)
-            criterion2_for_children=Q(ppid=patrner[0].id)
+            criterion1_for_children=Q(ppid=root_member[0].id)
+            criterion2_for_children=Q(pid=patrner[0].id)
             children=member.objects.filter(criterion1_for_children & criterion2_for_children)
             return_response['addchildren']=True
     return_response['partner']=patrner
@@ -84,6 +110,6 @@ def details(request):
 
 @login_required(login_url='/login')
 def logout(request):
-    messages.success(request, 'logged-out successfully')
     auth.logout(request)
     return redirect('/')
+

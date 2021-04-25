@@ -6,7 +6,8 @@ urlpatterns = [
     path('',views.homepage),
     path('details/',views.details),
     path('add-member/',views.add_member,name='add'),
-    path('update/',views.update),
+    path('update/<int:id>/',views.update,name='update'),
+    path('delete/<int:id>/',views.delete),
     path('login/',
         LoginView.as_view(
             template_name='admin/login.html',
@@ -14,5 +15,5 @@ urlpatterns = [
                 'site_header': 'Log in to Nidaghatta Family',
                 'site_title' : 'login',
             })),
-    path("logout/",views.logout)        
+    path("logout/",views.logout),     
 ]

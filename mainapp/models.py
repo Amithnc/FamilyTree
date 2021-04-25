@@ -64,16 +64,5 @@ class member(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-    def save(self, *args, **kwargs):   
-        # print("---------------------------------",self.image) 
-        try:
-            path=gd_storage.url(str(self.image))
-            splitted_url=path.split('&')
-            splitted_url[1]='export=view'
-            url="&".join(splitted_url)
-            self.url=url
-            super(member, self).save(*args, **kwargs)
-        except:
-            super(member, self).save(*args, **kwargs)
     class Meta:
         verbose_name_plural = "FAMILY-DATA"     

@@ -47,23 +47,51 @@
                             <p id="card-text">
                             <h5>Your details</h5>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item" style="background-color:#ecf0f3;">NAME :{%for member in main_member%} {{member.name}}{%endfor%}
+                                <li class="list-group-item" style="background-color:#ecf0f3;">{%for member in main_member%} {{member.name}}        
+                                    <a href="/update/{{member.id}}/"data-toggle="tooltip" title="EDIT DETAILS">
+                                        <button type="button" class="btn btn-outline-dark btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
+                                            <i class="fas fa-user-edit"></i>
+                                        </button>
+                                    </a>{%endfor%}
                                 </li>
                             </ul>
                             </p>
                             {%if partner%}
                             <p id="card-text">
-                            <h5>Your Partner details</h5>
+                            <h5>Your partner details</h5>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item" style="background-color:#ecf0f3;">NAME :{%for partner_obj in partner%} {{partner_obj.name}}{%endfor%}</li>
+                                <li class="list-group-item" style="background-color:#ecf0f3;">{%for partner_obj in partner%} {{partner_obj.name}}
+                                    <a href="/update/{{partner_obj.id}}/"data-toggle="tooltip" title="EDIT DETAILS">
+                                        <button type="button" class="btn btn-outline-dark btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
+                                            <i class="fas fa-user-edit"></i>
+                                        </button>
+                                    </a>
+                                    <a href="/delete/{{partner_obj.id}}/"data-toggle="tooltip" title="Delete Member">
+                                        <button type="button" class="btn btn-outline-danger btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </a>{%endfor%}
+                                </li>
                             </ul>
                             </p>
                             {%endif%}
                             {%if children%}
                             <p class="card-text">
                             <ul class="list-group list-group-flush">
-                                <h5>Your children Details</h5>
-                                <li class="list-group-item" style="background-color:#ecf0f3;">Cras justo odio</li>
+                                <h5>Your children details</h5>
+                                {%for child_obj in children%}
+                                <li class="list-group-item" style="background-color:#ecf0f3;"> {{forloop.counter}}.{{child_obj.name}}
+                                    <a href="/update/{{child_obj.id}}/"data-toggle="tooltip" title="EDIT DETAILS">
+                                        <button type="button" class="btn btn-outline-dark btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
+                                            <i class="fas fa-user-edit"></i>
+                                        </button>
+                                    </a>
+                                    <a href="/delete/{{child_obj.id}}/"data-toggle="tooltip" title="Delete Member">
+                                        <button type="button" class="btn btn-outline-danger btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </a>
+                                </li>{%endfor%}
                             </ul>
                             </p>
                             {%endif%}
@@ -101,34 +129,11 @@
             margin: 0;
         }
 
-        .container-fluid {
-
-            width: 100%;
-            height: 100vh;
-        }
-
         .col {
             box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #fff !important;
             border-radius: 15px;
         }
 
-        .form-group {
-            margin: 30px 0px;
-        }
-
-        .form-group input {
-            outline: none;
-            background: #ecf0f3 !important;
-            padding: 20px 10px 20px 5px;
-            border: none;
-            border-bottom: 2px solid white !important;
-            border-radius: 5px;
-        }
-
-        .form-group .btn {
-            width: 100%;
-            border-radius: 15px;
-        }
     </style>
 </body>
 <script>
