@@ -60,17 +60,22 @@
                             <p id="card-text">
                             <h5>Your partner details</h5>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item" style="background-color:#ecf0f3;">{%for partner_obj in partner%} {{partner_obj.name}}
+                                <li class="list-group-item" style="background-color:#ecf0f3;">
+                                    {%for partner_obj in partner%} 
+                                    <form action="/delete/" method="POST" onsubmit="return confirm('Are you sure you want to delete {{partner_obj.name}}');" >
+                                        {% csrf_token %}
+                                    {{partner_obj.name}}
                                     <a href="/update/{{partner_obj.id}}/"data-toggle="tooltip" title="EDIT DETAILS">
                                         <button type="button" class="btn btn-outline-dark btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
                                             <i class="fas fa-user-edit"></i>
                                         </button>
                                     </a>
-                                    <a href="/delete/{{partner_obj.id}}/"data-toggle="tooltip" title="Delete Member">
-                                        <button type="button" class="btn btn-outline-danger btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
+                                    <a href="/delete/"data-toggle="tooltip" title="Delete Member">
+                                        <button type="submit" value="{{partner_obj.id}}" name="id_to_delete" class="btn btn-outline-danger btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </a>{%endfor%}
+                                    </form>
                                 </li>
                             </ul>
                             </p>
@@ -80,17 +85,20 @@
                             <ul class="list-group list-group-flush">
                                 <h5>Your children details</h5>
                                 {%for child_obj in children%}
+                                <form action="/delete/" method="POST" onsubmit="return confirm('Are you sure you want to delete {{child_obj.name}}');" >
                                 <li class="list-group-item" style="background-color:#ecf0f3;"> {{forloop.counter}}.{{child_obj.name}}
                                     <a href="/update/{{child_obj.id}}/"data-toggle="tooltip" title="EDIT DETAILS">
                                         <button type="button" class="btn btn-outline-dark btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
                                             <i class="fas fa-user-edit"></i>
                                         </button>
                                     </a>
-                                    <a href="/delete/{{child_obj.id}}/"data-toggle="tooltip" title="Delete Member">
-                                        <button type="button" class="btn btn-outline-danger btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </a>
+                                        {% csrf_token %}
+                                        <a href="/delete/"data-toggle="tooltip" title="Delete Member">
+                                            <button type="submit" value="{{child_obj.id}}" name="id_to_delete" class="btn btn-outline-danger btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </a>
+                                    </form>
                                 </li>{%endfor%}
                             </ul>
                             </p>

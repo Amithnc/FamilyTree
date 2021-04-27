@@ -5,14 +5,10 @@ from django.shortcuts import get_object_or_404
 from gdstorage.storage import GoogleDriveStorage
 gd_storage = GoogleDriveStorage()
 
-flag=0
-
 @receiver(post_save, sender=member)
 def update_url_instance(sender, instance, created, **kwargs):
     url=""
-    global flag
-    if instance.image !="" and flag==0:
-        flag=1
+    if instance.image !="":
         path=gd_storage.url(str(instance.image))
         print(path)
         splitted_url=path.split('&')

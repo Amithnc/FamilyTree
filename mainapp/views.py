@@ -11,6 +11,8 @@ from .forms import memberForm
 from django.contrib.auth.hashers import make_password
 option=""
 def homepage(request):
+    # a,b=gd_storage.listdir("googlefiles")       
+    # print(a,b) #printing GD files
     details=member.objects.all()
     return_response={"details":details}
     return render(request,'home.html',return_response)
@@ -21,8 +23,9 @@ def add_member(request):
     if request.method == "GET":
         global option
         option=request.GET.get('option',None)   
+        form=memberForm()
     if request.method == "POST":
-        form = memberForm(request.POST or None)
+        form = memberForm(request.POST or None,request.FILES)
         if form.is_valid():
             details = form.save(commit=False)
             if option=='Partner':
@@ -44,14 +47,15 @@ def add_member(request):
                     patrner=member.objects.filter(id=user.pid) 
                     details.pid=patrner[0].id
                     details.ppid=user.id
+                details.password=make_password(details.password)    
                 details.save()
                 messages.success(request, 'Added Successfully go back to see the result')
                 return redirect('/details/')
-    form=memberForm()
     return_response={}
     return_response['form']=form
-    return_response['option']="Add "+option+" details"
+    return_response['option']="Add Your "+option+" details"
     return_response['url']='/add-member/'
+    return_response['title']='ADD  '+option
     return render(request,'addmember.html',return_response)
 
 @login_required(login_url='/login')
@@ -65,15 +69,17 @@ def update(request,id):
             details.password=make_password(details.password)
             details.save()    
             messages.success(request, 'Updated Successfully go back to see the result')
-            return redirect('/details/')
+            return redirect('/details/')  
     return_response={}
     return_response['form']=form 
     return_response['option']="Edit Profile:"+instance.name
     return_response['url']='/update/'+str(instance.id)+"/"
+    return_response['title']='Update Profile- '+str(instance.name)
     return render(request,'addmember.html',return_response)
 
 @login_required(login_url='/login')
-def delete(request,id):
+def delete(request):
+    id=request.POST.get('id_to_delete',None)
     instance=member.objects.filter(id=id)
     instance.delete()
     messages.success(request, 'Deleted Successfully go back to see the result')

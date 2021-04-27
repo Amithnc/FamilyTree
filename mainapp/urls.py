@@ -7,7 +7,7 @@ urlpatterns = [
     path('details/',views.details),
     path('add-member/',views.add_member,name='add'),
     path('update/<int:id>/',views.update,name='update'),
-    path('delete/<int:id>/',views.delete),
+    path('delete/',views.delete),
     path('login/',
         LoginView.as_view(
             template_name='admin/login.html',

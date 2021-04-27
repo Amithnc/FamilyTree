@@ -37,7 +37,7 @@ class MymemberManager(BaseUserManager):
 
 
 class member(AbstractBaseUser):
-    name                =models.CharField(max_length=50,default='',unique=True)
+    name                =models.CharField(max_length=50,default='',unique=True,verbose_name='FULL NAME')
     pid                 =models.IntegerField()
     ppid                =models.IntegerField(default=-1)
     image               =models.FileField(upload_to='googlefiles/', storage=gd_storage,default='',blank=True)
