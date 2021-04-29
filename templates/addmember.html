@@ -1,67 +1,59 @@
-<!DOCTYPE html>{% load static %}
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{{title}}</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
-</head>
-<style>
-    .errorlist{
-    border: 2px red solid;
-    background-color: yellow
-}
-</style>
-
-<body>
-    <div class="col-md-6 offset-md-3">
-        <span class="anchor"></span>
-        <hr class="my-5">
-        <div class="card card-outline-secondary">
-            <div class="card-body">
-                <h3 class="text-center">{{option}}</h3>
-                <hr>
-                <form action="{{url}}" method="post" enctype="multipart/form-data" onsubmit="show_alert()">
-                    {% csrf_token %}
-                    <div class="container">
-                        <div class="row">   
-                            {{ form.as_p }}
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block body %}
+<div class="col-md-6 offset-md-3">
+    <span class="anchor"></span>
+    <hr class="my-5">
+    <div class="container-fluid d-flex justify-content-center align-content-center align-items-center">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-6 col-lg-10 col-sm-12 col  p-4"
+                    style=" box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #fff !important;border-radius: 15px; background-color: #ecf0f3; ">
+                    <h3 class="text-center">{{option}}</h3>
+                    <hr>
+                    <form action="{{url}}" method="post" enctype="multipart/form-data" onsubmit="show_alert()">
+                        {% csrf_token %}
+                        <div class="container">
+                            <div class="row">
+                                {{ form.as_p }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="container">
-                        <div class="row align-items-start">
-                          <div class="col">
-                            <button class="btn btn-success" id="submit_btn" type="submit">Update</button>
-                          </div>
-                          <div class="col">
-                            <a href="/"><button type="button" class="btn btn-dark btn-rounded   "
-                                data-mdb-ripple-color="#ffffff"> <i class="fas fa-arrow-left"></i>
-                                Back</button></a>
-                          </div>
+                        <div class="container">
+                            <div class="row align-items-start">
+                                <div class="col">
+                                    <button class="btn btn-success btn-rounded " id="submit_btn"
+                                        type="submit"> ✔️ Submit</button>
+                                </div>
+                                <div class="col">
+                                    <a href="/details/"><button type="button" class="btn btn-dark btn-rounded "
+                                            id="back" data-mdb-ripple-color="#ffffff"> <i class="fas fa-arrow-left"></i>
+                                            Back</button></a>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    <!-- <p>
-                        <br
-                    </p> -->
-                    <div id="spinner" style="display:none;">
-                        Uploading Please Wait
-                        <div class="spinner-border text-primary" role="status"><span class="visually-hidden"></span>
+                        <div id="spinner" style="display:none;">
+                            Uploading Please Wait
+                            <div class="spinner-border text-primary" role="status"><span class="visually-hidden"></span>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-        <script>
-            function show_alert() {
-                document.getElementById("submit_btn").style.visibility = "hidden"
-                document.getElementById("spinner").style.display = "block"
-                alertify.alert('Do not Close', 'Please Wait your details are updating.<div class="spinner-border text-primary" role="status"><span class="visually-hidden"></span></div>').set('maximize', true);
-            }
-        </script>
-</body>
+    </div>
+</div>
+<script>
+    function show_alert() {
+        document.getElementById("submit_btn").style.visibility = "hidden"
+        document.getElementById("back").style.visibility = "hidden"
+        document.getElementById("spinner").style.display = "block"
+        alertify.alert('Do not Close', 'Please Wait your details are updating.<div class="spinner-border text-primary" role="status"><span class="visually-hidden"></span></div>').set('maximize', true);
+    }
+</script>
+<style>
+    .errorlist {
+        border: 2px red solid;
+        background-color: #ecf0f3;
+    }
+</style>
+{%endblock body%}

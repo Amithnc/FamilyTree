@@ -6,7 +6,7 @@ class memberForm(forms.ModelForm):
         model = member  
         fields = ('name','image','password')  
         widgets = {
-            'name': Textarea(attrs={'cols': 40, 'rows': 1}),
+            'name': Textarea(attrs={'cols': 20, 'rows': 1}),
             'password': forms.PasswordInput(),
         }
     def clean(self):
