@@ -44,11 +44,14 @@
                                             <i class="fas fa-user-edit"></i>
                                         </button>
                                     </a>
+                                    {%if not partner_delete %}
                                     <a href="/delete/"data-toggle="tooltip" title="Delete Member">
                                         <button type="submit" value="{{partner_obj.id}}" name="id_to_delete" class="btn btn-outline-danger btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
                                             <i class="fas fa-trash"></i>
                                         </button>
-                                    </a>{%endfor%}
+                                    </a>
+                                    {%endif%}
+                                    {%endfor%}
                                     </form>
                                 </li>
                             </ul>
@@ -119,6 +122,6 @@
 <script>
     setTimeout(function () {
         $('#alert').alert('close');
-    }, 3000);
+    }, 5000);
 </script>
 {%endblock body%}

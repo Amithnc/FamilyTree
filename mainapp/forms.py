@@ -14,7 +14,7 @@ class memberForm(forms.ModelForm):
         memberobj=member.objects.filter(name=username)  
         if len(memberobj)==1:
             if self.instance.id==None:
-                raise forms.ValidationError('USER NAME ALREADY EXISTS so please make username unique by adding initials')
+                raise forms.ValidationError('NAME ALREADY EXISTS so please make FULL NAME unique by adding initials')
             elif memberobj[0].id != self.instance.id :
-                raise forms.ValidationError('USER NAME ALREADY EXISTS so please make username unique by adding initials')  
+                raise forms.ValidationError('NAME ALREADY EXISTS so please make FULL NAME unique by adding initials')  
         return self.cleaned_data

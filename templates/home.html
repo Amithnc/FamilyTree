@@ -103,6 +103,13 @@
 <script>
 
     window.onload = function () {
+        {% if messages %}
+        {% for message in messages %}
+        alertify.set('notifier','position', 'top-center');
+        alertify.success( '{{ message }}' );
+        {% endfor %}
+        {% endif %}
+
         OrgChart.templates.family_template = Object.assign({}, OrgChart.templates.ana);
         OrgChart.templates.family_template.size = [86, 86];
         OrgChart.templates.family_template.plus = "";

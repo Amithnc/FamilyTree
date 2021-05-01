@@ -53,13 +53,33 @@ def add_member(request):
                 return redirect('/details/')
     return_response={}
     return_response['form']=form
-    return_response['option']="Add Your "+option+" details"
+    return_response['option']="Add your "+option+" details"
     return_response['url']='/add-member/'
     return_response['title']='ADD  '+option
     return render(request,'addmember.html',return_response)
 
 @login_required(login_url='/login')
 def update(request,id):
+    user=request.user
+    id_s=[user.id]
+    try:
+        if user.tag=="":
+            partner=get_object_or_404(member,Q(pid=user.id) & Q(tag="partner"))
+        else:
+            partner=get_object_or_404(member,id=user.pid)    
+        id_s.append(partner.id)
+        c1=Q(pid=user.id)
+        c2=Q(ppid=partner.id)
+        c3=Q(pid=partner.id)
+        c4=Q(ppid=user.id)
+        children=member.objects.filter((c1 & c2) | (c3 & c4) )
+        for child in children:
+            id_s.append(child.id)       
+    except Exception as e:
+        print(e)   
+    if id not in id_s:
+        messages.warning(request, 'You can only edit your family details')
+        return redirect('/details/')
     instance = get_object_or_404(member,id=id)
     form = memberForm(request.GET or None,instance = instance)
     if request.method == "POST":
@@ -80,8 +100,11 @@ def update(request,id):
 @login_required(login_url='/login')
 def delete(request):
     id=request.POST.get('id_to_delete',None)
-    instance=member.objects.filter(id=id)
-    instance.delete()
+    partner=member.objects.filter(id=id)
+    children=member.objects.filter(ppid=partner[0].id)
+    partner.delete()
+    for obj in children:
+        obj.delete()
     messages.success(request, 'Deleted Successfully go back to see the result')
     return redirect('/details/')
 
@@ -109,6 +132,8 @@ def details(request):
             criterion2_for_children=Q(pid=patrner[0].id)
             children=member.objects.filter(criterion1_for_children & criterion2_for_children)
             return_response['addchildren']=True
+    if user.tag == "partner":
+        return_response['partner_delete']=True
     return_response['partner']=patrner
     return_response['children']=children    
     return_response['main_member']=root_member
@@ -117,5 +142,6 @@ def details(request):
 @login_required(login_url='/login')
 def logout(request):
     auth.logout(request)
+    messages.success(request, '✔️ Logged Out Successfully Thanks for your time :) ')
     return redirect('/')
 
