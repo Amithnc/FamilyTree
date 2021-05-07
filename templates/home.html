@@ -45,12 +45,12 @@
 
 <body>
     <nav class="navbar navbar-dark navbar-expand-sm bg-dark fixed-top">
+        <i><h class="text" style="color: burlywood;" >Project By Amith</h6></i>
         <div class="container">
             <a href="/" class="navbar-brand">
                 <i class="fas fa-users"></i> &nbsp;
-                Nidaghatta Family
+                Nidaghatta Family Tree
             </a>
-            <i><h class="text" style="color: burlywood;" >Project By Amith</h6></i>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
                 <i class="fas fa-bars"></i>
             </button>
@@ -135,7 +135,6 @@
             this.nodeId = nodeId;
             var node = chart.get(nodeId);
             if (!node) return;
-            console.log(node.img)
             if(node.img =="/media/Default.png" ){
                 alertify.alert(node.name, 'No Image Found<br>');  
             }
