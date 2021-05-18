@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.contrib import messages
 from gdstorage.storage import GoogleDriveStorage
 gd_storage = GoogleDriveStorage()
@@ -22,7 +22,7 @@ def add_member(request):
     user=request.user
     if request.method == "GET":
         global option
-        option=request.GET.get('option',None)   
+        option=request.GET.get('option',None)
         form=memberForm()
     if request.method == "POST":
         form = memberForm(request.POST or None,request.FILES)
@@ -33,8 +33,8 @@ def add_member(request):
                 details.tag="partner"
                 details.password=make_password(details.password)
                 details.save()
-                messages.success(request, 'Added Successfully go back to see the result ')
-                return redirect('/details/')
+                messages.success(request, '✔️ Added Successfully go back to see the result')
+                return JsonResponse({'meassage':'success'})
             elif option=="child":
                 user=request.user
                 if user.tag=="":
@@ -44,13 +44,13 @@ def add_member(request):
                     details.pid=user.id
                     details.ppid=patrner[0].id
                 else:
-                    patrner=member.objects.filter(id=user.pid) 
+                    patrner=member.objects.filter(id=user.pid)
                     details.pid=patrner[0].id
                     details.ppid=user.id
-                details.password=make_password(details.password)    
+                details.password=make_password(details.password)
                 details.save()
-                messages.success(request, 'Added Successfully go back to see the result')
-                return redirect('/details/')
+                messages.success(request, '✔️ Added Successfully go back to see the result')
+                return JsonResponse({'meassage':'success'})
     return_response={}
     return_response['form']=form
     return_response['option']="Add your "+option+" details"
@@ -66,7 +66,7 @@ def update(request,id):
         if user.tag=="":
             partner=get_object_or_404(member,Q(pid=user.id) & Q(tag="partner"))
         else:
-            partner=get_object_or_404(member,id=user.pid)    
+            partner=get_object_or_404(member,id=user.pid)
         id_s.append(partner.id)
         c1=Q(pid=user.id)
         c2=Q(ppid=partner.id)
@@ -74,11 +74,11 @@ def update(request,id):
         c4=Q(ppid=user.id)
         children=member.objects.filter((c1 & c2) | (c3 & c4) )
         for child in children:
-            id_s.append(child.id)       
+            id_s.append(child.id)
     except Exception as e:
-        print(e)   
+        print(e)
     if id not in id_s:
-        messages.warning(request, 'You can only edit your family details')
+        messages.error(request, 'You can only edit your family details')
         return redirect('/details/')
     instance = get_object_or_404(member,id=id)
     form = memberForm(request.GET or None,instance = instance)
@@ -87,11 +87,11 @@ def update(request,id):
         if form.is_valid():
             details = form.save(commit=False)
             details.password=make_password(details.password)
-            details.save()    
-            messages.success(request, 'Updated Successfully go back to see the result')
-            return redirect('/details/')  
+            details.save()
+            messages.success(request, '✔️ Updated Successfully go back to see the result')
+            return redirect('/details/')
     return_response={}
-    return_response['form']=form 
+    return_response['form']=form
     return_response['option']="Edit Profile:"+instance.name
     return_response['url']='/update/'+str(instance.id)+"/"
     return_response['title']='Update Profile- '+str(instance.name)
@@ -119,14 +119,14 @@ def details(request):
         criterion2_for_prtner = Q(tag="partner")
         patrner=member.objects.filter(criterion1_for_prtner & criterion2_for_prtner)
         if len(patrner)==0:
-            return_response['addpatner']=True    
+            return_response['addpatner']=True
         elif len(patrner)==1:
             criterion1_for_children=Q(pid=root_member[0].id)
             criterion2_for_children=Q(ppid=patrner[0].id)
             children=member.objects.filter(criterion1_for_children & criterion2_for_children)
-            return_response['addchildren']=True  
+            return_response['addchildren']=True
     else:
-        patrner=member.objects.filter(id=root_member[0].pid)   
+        patrner=member.objects.filter(id=root_member[0].pid)
         if len(patrner)==1:
             criterion1_for_children=Q(ppid=root_member[0].id)
             criterion2_for_children=Q(pid=patrner[0].id)
@@ -135,13 +135,14 @@ def details(request):
     if user.tag == "partner":
         return_response['partner_delete']=True
     return_response['partner']=patrner
-    return_response['children']=children    
+    return_response['children']=children
     return_response['main_member']=root_member
-    return render(request,"details.html",return_response)    
+    return render(request,"details.html",return_response)
 
 @login_required(login_url='/login')
 def logout(request):
     auth.logout(request)
     messages.success(request, '✔️ Logged Out Successfully Thanks for your time :) ')
     return redirect('/')
+
 

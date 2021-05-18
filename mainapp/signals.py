@@ -10,7 +10,6 @@ def update_url_instance(sender, instance, created, **kwargs):
     url=""
     if instance.image !="":
         path=gd_storage.url(str(instance.image))
-        print(path)
         splitted_url=path.split('&')
         splitted_url[1]='export=view'
         url="&".join(splitted_url)

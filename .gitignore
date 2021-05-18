@@ -7,6 +7,7 @@ __pycache__/
 mainapp/migrations
 nidaghatta-057864936875.json
 media
+.vscode
 # C extensions
 *.so
 
