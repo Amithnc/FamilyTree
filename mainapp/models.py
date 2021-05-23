@@ -40,7 +40,7 @@ class member(AbstractBaseUser):
     name                =models.CharField(max_length=50,default='',unique=True,verbose_name='FULL NAME')
     pid                 =models.IntegerField()
     ppid                =models.IntegerField(default=-1)
-    image               =models.ImageField(upload_to='googlefiles/', storage=gd_storage,default='',blank=True)
+    image               =models.ImageField(upload_to='images/',default='',blank=True)
     tag                 =models.CharField(max_length=50,default='',blank=True)
     url                 =models.CharField(max_length=80,default='',blank=True)
     date_joined         =models.DateTimeField(verbose_name='date joined',auto_now_add=True)

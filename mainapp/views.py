@@ -11,8 +11,9 @@ from .forms import memberForm
 from django.contrib.auth.hashers import make_password
 option=""
 def homepage(request):
-    # a,b=gd_storage.listdir("googlefiles")       
-    # print(a,b) #printing GD files
+    # # gd_storage.delete('filename') #- to delete file
+    # a,b=gd_storage.listdir("googlefiles") 
+    # print(b)
     details=member.objects.all()
     return_response={"details":details}
     return render(request,'home.html',return_response)
@@ -50,7 +51,13 @@ def add_member(request):
                 details.password=make_password(details.password)
                 details.save()
                 messages.success(request, '✔️ Added Successfully go back to see the result')
-                return JsonResponse({'meassage':'success'})
+                return JsonResponse({'meassage':'success'},status=200)
+        else:
+            form.errors.as_data()
+            for e in form.errors['__all__'].as_data():
+                temp=str(e)
+                error=temp[2:-2]    
+            return JsonResponse({"error": error}, status=400)
     return_response={}
     return_response['form']=form
     return_response['option']="Add your "+option+" details"
@@ -86,10 +93,19 @@ def update(request,id):
         form = memberForm(request.POST  or None,request.FILES,instance = instance)
         if form.is_valid():
             details = form.save(commit=False)
+            url=details.url
+            if url=="delete image":
+                details.image=None
             details.password=make_password(details.password)
             details.save()
             messages.success(request, '✔️ Updated Successfully go back to see the result')
-            return redirect('/details/')
+            return JsonResponse({'meassage':'success'},status=200)
+        else:   
+            form.errors.as_data() 
+            for e in form.errors['__all__'].as_data():
+                temp=str(e)
+                error=temp[2:-2]    
+            return JsonResponse({"error": error}, status=400)     
     return_response={}
     return_response['form']=form
     return_response['option']="Edit Profile:"+instance.name

@@ -22,7 +22,8 @@
                         <div class="container">
                             <div class="row align-items-start">
                                 <div class="col">
-                                    <input type="button" value="submit" class="btn btn-success" id="submit_btn">
+                                    <input type="button" value="✔️ submit" class="btn btn-success btn-rounded "
+                                        id="submit_btn">
                                 </div>
                                 <div class="col">
                                     <a href="/details/"><button type="button" class="btn btn-dark btn-rounded "
@@ -43,7 +44,6 @@
     </div>
 </div>
 <script>
-
     const input = document.getElementById("id_image")
     const imagebox = document.getElementById("image-box")
     const confirmbtn = document.getElementById('submit_btn')
@@ -51,85 +51,146 @@
     const imageform = document.getElementById('image_form')
     const MAX_WIDTH = 320;
     const MAX_HEIGHT = 180;
-    const MIME_TYPE = "image/jpeg";
+    const MIME_TYPE = "image/png";
     const QUALITY = 0.9;
-
+    var cropperdata;
+    alertify.set('notifier', 'delay', 8);
+    alertify.set('notifier', 'position', 'top-center');
     input.onchange = function (ev) {
         const image_data = input.files[0]
         const url = URL.createObjectURL(image_data);
-        imagebox.innerHTML = `<h6>Please Crop your image below<h6><img src="${url}" id="image" width="300px">`
+        imagebox.innerHTML = `<h6>Please Crop your image below and click submit <h6><img src="${url}" id="image" width="300px">`
         var $image = $('#image');
         $image.cropper({
             aspectRatio: 1 / 1,
             crop(event) {
-                console.log(event.detail.x);
-                console.log(event.detail.y);
-                console.log(event.detail.width);
-                console.log(event.detail.height);
             },
         });
-        var cropper = $image.data('cropper');
-        confirmbtn.addEventListener('click', () => {
-            cropper.getCroppedCanvas().toBlob((blob) => {
-                console.log(blob)
-                var objectURL = URL.createObjectURL(blob);
-                const img = new Image();
-                img.src = objectURL;
-                img.onerror = function () {
-                    URL.revokeObjectURL(this.src);
-                    // Handle the failure properly
-                    console.log("Cannot load image");
-                };
-                img.onload = function () {
-                    URL.revokeObjectURL(this.src);
-                    const [newWidth, newHeight] = calculateSize(img, MAX_WIDTH, MAX_HEIGHT);
-                    const canvas = document.createElement("canvas");
-                    canvas.width = newWidth;
-                    canvas.height = newHeight;
-                    const ctx = canvas.getContext("2d");
-                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
-                    canvas.toBlob(
-                        (blob) => {
-                            // Handle the compressed image. es. upload or save in local state
-                            const fd = new FormData()
-                            var name = $("#id_name").val();
-                            var password = $("#id_password").val();
-                            fd.append('csrfmiddlewaretoken', csrf[0].value)
-                            fd.append('name', name)
-                            fd.append('password', password)
-                            fd.append('image', blob, 'my_imgage.png')
-                            for (var key of fd.entries()) {
-                                console.log(key[0] + ', ' + key[1]);
-                            }
-                            $.ajax({
-                                type: "POST",
-                                url: imageform.action,
-                                enctype: 'multipart/form-data',
-                                data: fd,
-                                success: function (response) {
-                                    location.href = "/details/"
-                                },
-                                eror: function (response) {
-                                    console; log(response)
-                                },
-                                cache: false,
-                                contentType: false,
-                                processData: false
-
-                            })
-                        },
-                        MIME_TYPE,
-                        QUALITY
-                    );
-                };
-            })
-            document.getElementById("submit_btn").style.visibility = "hidden"
-            document.getElementById("back").style.visibility = "hidden"
-            document.getElementById("spinner").style.display = "block"
-            alertify.alert('Do not Close', 'Please Wait your details are updating.<div class="spinner-border text-primary" role="status"><span class="visually-hidden"></span></div>').set('maximize', true);
-        })
+        cropperdata = $image.data('cropper');
     };
+    confirmbtn.addEventListener('click', () => {
+        if (typeof cropperdata !== 'undefined') {
+            try {
+                cropperdata.getCroppedCanvas().toBlob((blob) => {
+                    console.log("cropped blob", blob)
+                    var objectURL = URL.createObjectURL(blob);
+                    const img = new Image();
+                    img.src = objectURL;
+                    img.onerror = function () {
+                        URL.revokeObjectURL(this.src);
+                        // Handle the failure properly
+                        console.log("Cannot load image");
+                    };
+                    img.onload = function () {
+                        URL.revokeObjectURL(this.src);
+                        const [newWidth, newHeight] = calculateSize(img, MAX_WIDTH, MAX_HEIGHT);
+                        const canvas = document.createElement("canvas");
+                        canvas.width = newWidth;
+                        canvas.height = newHeight;
+                        const ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+                        canvas.toBlob(
+                            (blob) => {
+                                const fd = new FormData()
+                                var name = $("#id_name").val();
+                                var password = $("#id_password").val();
+                                if (validate("name", name) && validate("password", password)) {
+                                    document.getElementById("submit_btn").style.display = "none"
+                                    document.getElementById("back").style.display = "none"
+                                    document.getElementById("spinner").style.display = "block"
+                                    alertify.alert('Do not Close', 'Please Wait your details are updating.<div class="spinner-border text-primary" role="status"><span class="visually-hidden"></span></div>').set('maximize', true);
+                                    fd.append('csrfmiddlewaretoken', csrf[0].value)
+                                    fd.append('name', name)
+                                    fd.append('password', password)
+                                    fd.append('image', blob, name + '.png')
+                                    console.log("compressed blob", blob)
+                                    $.ajax({
+                                        type: "POST",
+                                        url: imageform.action,
+                                        enctype: 'multipart/form-data',
+                                        data: fd,
+                                        success: function (response) {
+                                            console.log(response)
+                                            location.href = "/details/"
+                                        },
+                                        error: function (response) {
+                                            alertify.alert().destroy();
+                                            document.getElementById("submit_btn").style.display = "block"
+                                            document.getElementById("back").style.display = "block"
+                                            document.getElementById("spinner").style.display = "none"
+                                            $("#id_name").focus()
+                                            alertify.error(response["responseJSON"]["error"]);
+                                        },
+                                        cache: false,
+                                        contentType: false,
+                                        processData: false
 
+                                    })
+                                }
+                            },
+                            MIME_TYPE,
+                            QUALITY
+                        );
+                    }
+                })
+            }
+            catch {
+                $("#id_image").focus()
+                alertify.error("please add only image files to the image field");
+            }
+        }
+        else {
+            console.log("IF CASE")
+            const fd = new FormData()
+            var name = $("#id_name").val();
+            var password = $("#id_password").val();
+            if ($('#image-clear_id').is(':checked')) {
+                console.log(" delete CASE")
+                fd.append('url', 'delete image')
+            }
+            if (validate("name", name) && validate("password", password)) {
+                document.getElementById("submit_btn").style.display = "none"
+                document.getElementById("back").style.display = "none"
+                document.getElementById("spinner").style.display = "block"
+                alertify.alert('Do not Close', 'Please Wait your details are updating.<div class="spinner-border text-primary" role="status"><span class="visually-hidden"></span></div>').set('maximize', true);
+                fd.append('csrfmiddlewaretoken', csrf[0].value)
+                fd.append('name', name)
+                fd.append('password', password)
+                // for (var key of fd.entries()) {
+                //     console.log(key[0] + ', ' + key[1]);
+                // }
+                $.ajax({
+                    type: "POST",
+                    url: imageform.action,
+                    enctype: 'multipart/form-data',
+                    data: fd,
+                    success: function (response) {
+                        console.log(response)
+                        location.href = "/details/"
+                    },
+                    error: function (response) {
+                        alertify.alert().destroy();
+                        document.getElementById("submit_btn").style.display = "block"
+                        document.getElementById("back").style.display = "block"
+                        document.getElementById("spinner").style.display = "none"
+                        $("#id_name").focus()
+                        alertify.error(response["responseJSON"]["error"]);
+                    },
+                    cache: true,
+                    contentType: false,
+                    processData: false
+
+                })
+            }
+        }
+    })
+    function validate(data, param) {
+        if (param == "") {
+            $("#id_" + data).focus()
+            alertify.error('❌ Please enter ' + data);
+            return false
+        } else { return true }
+    }
     function calculateSize(img, maxWidth, maxHeight) {
         let width = img.width;
         let height = img.height;

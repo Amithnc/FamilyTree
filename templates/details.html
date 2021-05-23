@@ -85,12 +85,12 @@
                             <form method="GET" action="/add-member/">
                                 {% csrf_token %}
                                 {%if addpatner %}
-                                <button type="submit" class="btn btn-secondary btn-rounded   "
+                                <button type="submit" class="btn btn-primary "
                                     data-mdb-ripple-color="#ffffff" name="option" value="Partner" > Add your Partner <i
                                         class="fas fa-male fa-2x"></i></button>
                                 {%endif%}
                                 {%if addchildren %}
-                                <button type="submit" class="btn btn-secondary btn-rounded   "
+                                <button type="submit" class="btn btn-secondary"
                                     data-mdb-ripple-color="#ffffff" name="option" value="child" > Add your child <i
                                         class="fas fa-baby fa-2x"></i></button>
                                 {%endif%}

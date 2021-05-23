@@ -176,7 +176,7 @@
             }
         });
         chart.load([
-            {%for member in details%}{id:{{member.id}},{%if member.pid != -1%}pid:{{member.pid}},{%endif%}{%if member.ppid != -1%}ppid:{{member.ppid}},{%endif%}tags:['{{member.tag}}'],name:'{%if  request.user|stringformat:'s' == member.name %}You{%else%}{{member.name}}{%endif%}',img: {%if member.url == ""%}"/media/Default.png" {%else%}"{{member.url}}"{%endif%},},{%endfor%}
+            {%for member in details%}{id:{{member.id}},{%if member.pid != -1%}pid:{{member.pid}},{%endif%}{%if member.ppid != -1%}ppid:{{member.ppid}},{%endif%}tags:['{{member.tag}}'],name:'{%if  request.user|stringformat:'s' == member.name %}You{%else%}{{member.name}}{%endif%}',img: {%if member.image == ""%}"/media/Default.png" {%else%}"/media/{{member.image}}"{%endif%},},{%endfor%}
             
         ]);
     };
