@@ -1,6 +1,11 @@
 from django.urls import path
 from . import views
-from django.contrib.auth.views import LoginView,LogoutView
+from django.contrib.auth.views import LoginView
+from django.contrib.messages.views import SuccessMessageMixin
+
+class LoginFormView(SuccessMessageMixin, LoginView):
+    template_name='admin/login.html'
+    success_message = "✔️ logged in successfully "
 
 urlpatterns = [
     path('',views.homepage),
@@ -9,8 +14,7 @@ urlpatterns = [
     path('update/<int:id>/',views.update,name='update'),
     path('delete/',views.delete),
     path('login/',
-        LoginView.as_view(
-            template_name='admin/login.html',
+        LoginFormView.as_view(
             extra_context={
                 'site_header': 'Log in to Nidaghatta Family',
                 'site_title' : 'login',

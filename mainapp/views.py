@@ -121,7 +121,7 @@ def delete(request):
     partner.delete()
     for obj in children:
         obj.delete()
-    messages.success(request, 'Deleted Successfully go back to see the result')
+    messages.success(request, '✔️ Deleted Successfully go back to see the result')
     return redirect('/details/')
 
 @login_required(login_url='/login')

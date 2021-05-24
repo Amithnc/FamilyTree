@@ -5,16 +5,6 @@
         <div class="container">
             <div class="row d-flex justify-content-center">
                 <div class="col-md-6 col-lg-8 col-sm-12 col  p-4">
-                    {% load static %}
-                    {% if messages %}
-                    {% for message in messages %}
-                    <div id="alert"
-                        class="alert {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %}"
-                        role="alert">
-                        <h5><strong> {{ message }}</strong></h5>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
                     <h3 class="text text-center"><b>Your family deatils</b></h3>
                     <div class="card border border-dark shadow-0 " style="background-color:#ecf0f3;">
                         <div class="card-body">
@@ -120,8 +110,13 @@
         }
 </style>   
 <script>
-    setTimeout(function () {
-        $('#alert').alert('close');
-    }, 5000);
+    window.onload = function () {
+        {% if messages %}
+        {% for message in messages %}
+        alertify.set('notifier','position', 'top-center');
+        alertify.success( '{{ message }}' );
+        {% endfor %}
+        {% endif %}
+    }
 </script>
 {%endblock body%}
