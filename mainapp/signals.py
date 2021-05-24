@@ -2,8 +2,6 @@ from .models import member
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404
-from gdstorage.storage import GoogleDriveStorage
-gd_storage = GoogleDriveStorage()
 
 @receiver(post_save, sender=member)
 def update_url_instance(sender, instance, created, **kwargs):

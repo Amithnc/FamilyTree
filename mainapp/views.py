@@ -1,8 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse,JsonResponse
 from django.contrib import messages
-from gdstorage.storage import GoogleDriveStorage
-gd_storage = GoogleDriveStorage()
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from .models import member

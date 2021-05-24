@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-from gdstorage.storage import GoogleDriveStorage
-gd_storage = GoogleDriveStorage()
 
 class MymemberManager(BaseUserManager):
     def create_user(self,name,pid,ppid,password=None):
