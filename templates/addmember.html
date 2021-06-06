@@ -93,17 +93,15 @@
                             (blob) => {
                                 const fd = new FormData()
                                 var name = $("#id_name").val();
-                                var password = $("#id_password").val();
-                                if (validate("name", name) && validate("password", password)) {
+                                if (validate("name", name)) {
                                     document.getElementById("submit_btn").style.display = "none"
                                     document.getElementById("back").style.display = "none"
                                     document.getElementById("spinner").style.display = "block"
                                     alertify.alert('Do not Close', 'Please Wait your details are updating.<div class="spinner-border text-primary" role="status"><span class="visually-hidden"></span></div>').set('maximize', true);
                                     fd.append('csrfmiddlewaretoken', csrf[0].value)
                                     fd.append('name', name)
-                                    fd.append('password', password)
-                                    fd.append('image', blob, name + '.png')
                                     console.log("compressed blob", blob)
+                                    fd.append('image', blob, name + '.png')
                                     $.ajax({
                                         type: "POST",
                                         url: imageform.action,
@@ -140,22 +138,19 @@
             }
         }
         else {
-            console.log("IF CASE")
             const fd = new FormData()
             var name = $("#id_name").val();
-            var password = $("#id_password").val();
             if ($('#image-clear_id').is(':checked')) {
                 console.log(" delete CASE")
                 fd.append('url', 'delete image')
             }
-            if (validate("name", name) && validate("password", password)) {
+            if (validate("name", name)) {
                 document.getElementById("submit_btn").style.display = "none"
                 document.getElementById("back").style.display = "none"
                 document.getElementById("spinner").style.display = "block"
                 alertify.alert('Do not Close', 'Please Wait your details are updating.<div class="spinner-border text-primary" role="status"><span class="visually-hidden"></span></div>').set('maximize', true);
                 fd.append('csrfmiddlewaretoken', csrf[0].value)
                 fd.append('name', name)
-                fd.append('password', password)
                 // for (var key of fd.entries()) {
                 //     console.log(key[0] + ', ' + key[1]);
                 // }

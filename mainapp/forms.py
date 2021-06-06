@@ -5,10 +5,9 @@ from django.http import JsonResponse
 class memberForm(forms.ModelForm):  
     class Meta:  
         model = member  
-        fields = ('name','image','password','url')  
+        fields = ('name','image','url')  
         widgets = {
             'name': forms.TextInput(),
-            'password': forms.PasswordInput(),
             'url' : forms.HiddenInput(),
         }
     def clean(self):

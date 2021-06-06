@@ -30,7 +30,7 @@ def add_member(request):
             if option=='Partner':
                 details.pid=user.id
                 details.tag="partner"
-                details.password=make_password(details.password)
+                details.password=make_password("Nidaghatta")
                 details.save()
                 messages.success(request, '✔️ Added Successfully go back to see the result')
                 return JsonResponse({'meassage':'success'})
@@ -46,7 +46,7 @@ def add_member(request):
                     patrner=member.objects.filter(id=user.pid)
                     details.pid=patrner[0].id
                     details.ppid=user.id
-                details.password=make_password(details.password)
+                details.password=make_password("Nidaghatta")
                 details.save()
                 messages.success(request, '✔️ Added Successfully go back to see the result')
                 return JsonResponse({'meassage':'success'},status=200)
@@ -94,7 +94,7 @@ def update(request,id):
             url=details.url
             if url=="delete image":
                 details.image=None
-            details.password=make_password(details.password)
+            details.password=make_password("Nidaghatta")
             details.save()
             messages.success(request, '✔️ Updated Successfully go back to see the result')
             return JsonResponse({'meassage':'success'},status=200)
