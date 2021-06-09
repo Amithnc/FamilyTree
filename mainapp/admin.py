@@ -8,5 +8,6 @@ admin.site.site_header="Nidaghatta Family-ADMIN"
 
 class memberAdmin(admin.ModelAdmin):
     list_display = ('name',"image")
+    list_filter = ('is_requested_to_delete',)
 
 admin.site.register(member,memberAdmin)

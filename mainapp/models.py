@@ -35,18 +35,19 @@ class MymemberManager(BaseUserManager):
 
 
 class member(AbstractBaseUser):
-    name                =models.CharField(max_length=50,default='',unique=True,verbose_name='FULL NAME')
-    pid                 =models.IntegerField()
-    ppid                =models.IntegerField(default=-1)
-    image               =models.ImageField(upload_to='images/',default='',blank=True)
-    tag                 =models.CharField(max_length=50,default='',blank=True)
-    url                 =models.CharField(max_length=80,default='',blank=True)
-    date_joined         =models.DateTimeField(verbose_name='date joined',auto_now_add=True)
-    last_login          =models.DateTimeField(verbose_name='last login',auto_now=True)
-    is_admin            =models.BooleanField(default=False)
-    is_active           =models.BooleanField(default=True)
-    is_staff            =models.BooleanField(default=False)
-    is_superuser        =models.BooleanField(default=False)
+    name                    =models.CharField(max_length=50,default='',unique=True,verbose_name='FULL NAME')
+    pid                     =models.IntegerField()
+    ppid                    =models.IntegerField(default=-1)
+    image                   =models.ImageField(upload_to='images/',default='',blank=True)
+    tag                     =models.CharField(max_length=50,default='',blank=True)
+    url                     =models.CharField(max_length=80,default='',blank=True)
+    date_joined             =models.DateTimeField(verbose_name='date joined',auto_now_add=True)
+    last_login              =models.DateTimeField(verbose_name='last login',auto_now=True)
+    is_requested_to_delete  =models.BooleanField(default=False)
+    is_admin                =models.BooleanField(default=False)
+    is_active               =models.BooleanField(default=True)
+    is_staff                =models.BooleanField(default=False)
+    is_superuser            =models.BooleanField(default=False)
     
     USERNAME_FIELD='name'
     REQUIRED_FIELDS=['pid','ppid',]

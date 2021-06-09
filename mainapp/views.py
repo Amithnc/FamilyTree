@@ -114,12 +114,8 @@ def update(request,id):
 @login_required(login_url='/login')
 def delete(request):
     id=request.POST.get('id_to_delete',None)
-    partner=member.objects.filter(id=id)
-    children=member.objects.filter(ppid=partner[0].id)
-    partner.delete()
-    for obj in children:
-        obj.delete()
-    messages.success(request, '✔️ Deleted Successfully go back to see the result')
+    member.objects.filter(id=id).update(is_requested_to_delete=True)
+    messages.success(request, '✔️ Delete request sent successfully . It will be deleted once admin approves it')
     return redirect('/details/')
 
 @login_required(login_url='/login')

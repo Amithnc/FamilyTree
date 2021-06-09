@@ -35,11 +35,15 @@
                                         </button>
                                     </a>
                                     {%if not partner_delete %}
+                                    {% if not partner_obj.is_requested_to_delete %}
                                     <a href="/delete/"data-toggle="tooltip" title="Delete Member">
                                         <button type="submit" value="{{partner_obj.id}}" name="id_to_delete" class="btn btn-outline-danger btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </a>
+                                    {% else %}
+                                            <h5 class="badge badge-pill badge-danger" >Delete Request sent</h5>
+                                    {%endif%}
                                     {%endif%}
                                     {%endfor%}
                                     </form>
@@ -60,11 +64,15 @@
                                         </button>
                                     </a>
                                         {% csrf_token %}
+                                        {% if not child_obj.is_requested_to_delete %}
                                         <a href="/delete/"data-toggle="tooltip" title="Delete Member">
                                             <button type="submit" value="{{child_obj.id}}" name="id_to_delete" class="btn btn-outline-danger btn-rounded   btn-sm" data-mdb-ripple-color="#000000"> 
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </a>
+                                        {% else %}
+                                            <h5 class="badge badge-pill badge-danger" >Delete Request sent</h5>
+                                        {%endif%}
                                     </form>
                                 </li>{%endfor%}
                             </ul>
